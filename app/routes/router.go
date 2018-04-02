@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ken-aio/go-echo-sqlboiler/app/handlers/v1"
-	"github.com/ken-aio/go-echo-sqlboiler/app/middleware"
+	"github.com/ken-aio/go-echo-xorm/app/handlers/v1"
+	"github.com/ken-aio/go-echo-xorm/app/middleware"
 	"github.com/labstack/echo"
 
 	"github.com/swaggo/echo-swagger"

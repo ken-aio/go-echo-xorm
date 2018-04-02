@@ -1,4 +1,4 @@
-package services
+package logics
 
 import "github.com/ken-aio/go-echo-sqlboiler/app/models"
 

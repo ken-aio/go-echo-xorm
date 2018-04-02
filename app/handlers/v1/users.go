@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/ken-aio/go-echo-sqlboiler/app/services"
+	"github.com/ken-aio/go-echo-xorm/app/logics"
 	"github.com/labstack/echo"
 )
 
@@ -29,7 +30,8 @@ func UserCreate(c echo.Context) error {
 	if err := c.Bind(u); err != nil {
 		return err
 	}
-	userID, err := services.UserCreate(u.Name, u.Birthdate, u.Gender)
+	logic := logics.NewUserLogic(c)
+	userID, err := logic.UserCreate(u.Name, u.Birthdate, u.Gender)
 	if err != nil {
 		return err
 	}

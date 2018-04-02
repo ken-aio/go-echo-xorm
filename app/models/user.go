@@ -1,55 +1,55 @@
 package models
 
 import (
-	"time"
-
-	"github.com/ken-aio/go-echo-sqlboiler/app/infra/db"
-	"github.com/volatiletech/sqlboiler/queries/qm"
-	null "gopkg.in/volatiletech/null.v6"
+	"github.com/go-xorm/xorm"
+	"github.com/ken-aio/go-echo-xorm/app/infra/db"
 )
 
-// UserCreate new user
-type UserCreate struct {
+// UserCreateRes new user
+type UserCreateRes struct {
 	ID uint64 `json:"id"`
 }
 
-// UserList list userr struct
-type UserList struct {
+// UserListRes list userr struct
+type UserListRes struct {
 	ID   uint64 `json:"id"`
 	Name string `json:"name"`
 }
 
 // User basic user struct
 type User struct {
-	ID        uint64    `json:"id"`
-	Name      string    `json:"name"`
-	Birthdate time.Time `json:"birthdate"`
-	Gender    string    `json:"gender"`
-	CreatedAt time.Time `json:"created_at"`
+	*CommonModel
+	*db.Users
+}
+
+// NewUserModel create user instance
+func NewUserModel(s *xorm.Session) *User {
+	user := &User{}
+	user.CommonModel = &CommonModel{Sess: s}
+	user.Users = &db.Users{}
+	return user
 }
 
 // Create insert into user
 func (u *User) Create() (uint64, error) {
-	user := &db.User{
-		Name:      u.Name,
-		Birthdate: null.Time{u.Birthdate, true},
-		Gender:    u.Gender,
+	_, err := u.Sess.Insert(u.Users)
+	if err != nil {
+		return 0, err
 	}
-	err := user.InsertG()
-	return user.ID, err
+	return u.Id, nil
 }
 
 // List select user list
-func (u *User) List() ([]*UserList, error) {
-	users, err := db.UsersG(qm.Select("id", "name"), qm.OrderBy("ID asc")).All()
-	if err != nil {
-		return nil, err
-	}
+func (u *User) List() ([]*UserListRes, error) {
+	// select
+	//if err != nil {
+	//	return nil, err
+	//}
 
-	list := make([]*UserList, len(users))
-	for i := 0; i < len(users); i++ {
-		user := users[i]
-		list[i] = &UserList{user.ID, user.Name}
-	}
-	return list, nil
+	//list := make([]*UserList, len(users))
+	//for i := 0; i < len(users); i++ {
+	//	user := users[i]
+	//	list[i] = &UserList{user.ID, user.Name}
+	//}
+	return nil, nil
 }

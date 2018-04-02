@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/ken-aio/go-echo-sqlboiler/app/routes"
-	_ "github.com/ken-aio/go-echo-sqlboiler/docs"
+	"github.com/ken-aio/go-echo-xorm/app/routes"
+	_ "github.com/ken-aio/go-echo-xorm/docs"
 )
 
 // @title Go Echo SQLBoiler sample project
