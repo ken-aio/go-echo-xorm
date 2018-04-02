@@ -28,7 +28,7 @@ func (u *UserLogic) UserCreate(name string, birthdate time.Time, gender string) 
 	user.Name = name
 	user.Birthdate = birthdate
 	user.Gender = gender
-	id, err := user.Create()
+	res, err := user.Create()
 	if err != nil {
 		if err := sess.Rollback(); err != nil {
 			logrus.Error("Error in user_logic.Create rollback.", err)
@@ -36,7 +36,7 @@ func (u *UserLogic) UserCreate(name string, birthdate time.Time, gender string) 
 		return nil, err
 	}
 	sess.Commit()
-	return id, nil
+	return res, nil
 }
 
 // UserList list user

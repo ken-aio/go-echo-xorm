@@ -74,6 +74,12 @@
   version = "v0.6.4"
 
 [[projects]]
+  name = "github.com/k0kubun/pp"
+  packages = ["."]
+  revision = "027a6d1765d673d337e687394dbe780dd64e2a1e"
+  version = "v2.3.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/ken-aio/go-echo-sqlboiler"
   packages = [
@@ -266,6 +272,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7fd968bc29c231fdb73689dbd26b6f67e2999cd1c03d99371bde4a03de62770f"
+  inputs-digest = "3b7ecf2ca21e23bbd24611f3135f0da52e49f5dce12b0fd13f80e02bf95407bc"
   solver-name = "gps-cdcl"
   solver-version = 1

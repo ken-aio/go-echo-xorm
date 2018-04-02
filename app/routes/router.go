@@ -15,6 +15,7 @@ import (
 func Init() *echo.Echo {
 	e := echo.New()
 
+	// TODO config
 	e.Debug = true
 
 	middleware.Init(e)

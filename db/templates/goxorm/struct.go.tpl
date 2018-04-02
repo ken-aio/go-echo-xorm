@@ -1,4 +1,5 @@
-package {{.Model}}
+{{$packName := .Model}}
+package {{$packName}}
 
 {{$ilen := len .Imports}}
 {{if gt $ilen 0}}
@@ -14,18 +15,18 @@ type {{Mapper .Name}} struct {
 {{end}}
 }
 
-func ({{.Model}} a*{{.Name}}) SetUpdatedBy(trace string) {
-	{{.Model}}.UpdatedBy = trace
+func ({{$packName}} *{{Mapper .Name}}) SetUpdatedBy(trace string) {
+	{{$packName}}.UpdatedBy = trace
 }
 
-func ({{.Model}} *{{.Name}}) BeforeInsert() {
-	{{.Model}}.CreatedAt = time.Now()
-	{{.Model}}.UpdatedAt = time.Now()
-	{{.Model}}.CreatedBy = db.UpdatedBy
+func ({{$packName}} *{{Mapper .Name}}) BeforeInsert() {
+	{{$packName}}.CreatedAt = time.Now()
+	{{$packName}}.UpdatedAt = time.Now()
+	{{$packName}}.CreatedBy = db.UpdatedBy
 }
 
-func ({{.Model}} *{{.Name}}) BeforeUpdate() {
-	{{.Model}}.UpdatedAt = time.Now()
+func ({{$packName}} *{{Mapper .Name}}) BeforeUpdate() {
+	{{$packName}}.UpdatedAt = time.Now()
 }
 
 {{end}}

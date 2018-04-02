@@ -30,6 +30,7 @@ func (d *CustomContext) GetDB() (*xorm.Engine, error) {
 	if err != nil {
 		return nil, err
 	}
+	con.ShowSQL(true)
 	d.Set(DBKey, con)
 	return con, nil
 }

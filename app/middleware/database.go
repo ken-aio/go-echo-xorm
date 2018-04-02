@@ -21,7 +21,9 @@ func Database(next echo.HandlerFunc) echo.HandlerFunc {
 			ua = ua[0:20]
 		}
 		trace := c.Request().Method + " " + c.Path() + " " + ua
-		sess := con.Before(func(bean interface{}) {
+		sess := con.NewSession()
+		defer sess.Close()
+		sess = sess.Before(func(bean interface{}) {
 			bean.(db.ICommonColumn).SetUpdatedBy(trace)
 		})
 		cc.SetSession(sess)
