@@ -4,10 +4,6 @@ import (
 	"time"
 )
 
-type ICommonColumn interface {
-	SetUpdatedBy(trace string)
-}
-
 type Users struct {
 	Id        uint64    `xorm:"pk autoincr BIGINT(20)"`
 	Name      string    `xorm:"not null VARCHAR(255)"`

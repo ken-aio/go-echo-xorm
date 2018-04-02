@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ken-aio/go-echo-sqlboiler/app/services"
 	"github.com/ken-aio/go-echo-xorm/app/logics"
 	"github.com/labstack/echo"
 )
@@ -23,7 +22,7 @@ type (
 // @Accept  json
 // @Produce  json
 // @Param   body     body    v1.userCreateReq     true        "user create parameter"
-// @Success 200 {object} models.UserCreate	""
+// @Success 200 {object} models.UserCreateRes	""
 // @Router /api/v1/users [post]
 func UserCreate(c echo.Context) error {
 	u := &userCreateReq{}
@@ -31,11 +30,11 @@ func UserCreate(c echo.Context) error {
 		return err
 	}
 	logic := logics.NewUserLogic(c)
-	userID, err := logic.UserCreate(u.Name, u.Birthdate, u.Gender)
+	resp, err := logic.UserCreate(u.Name, u.Birthdate, u.Gender)
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, map[string]uint64{"user_id": userID})
+	return c.JSON(http.StatusOK, resp)
 }
 
 // UserList User list API
@@ -43,14 +42,15 @@ func UserCreate(c echo.Context) error {
 // @Description list users
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} models.UserList	""
+// @Success 200 {object} models.UserListRes	""
 // @Router /api/v1/users [get]
 func UserList(c echo.Context) error {
-	res, err := services.UserList()
+	logic := logics.NewUserLogic(c)
+	resp, err := logic.UserList()
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, res)
+	return c.JSON(http.StatusOK, resp)
 }
 
 // UserUpdate User update API

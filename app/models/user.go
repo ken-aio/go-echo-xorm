@@ -31,25 +31,24 @@ func NewUserModel(s *xorm.Session) *User {
 }
 
 // Create insert into user
-func (u *User) Create() (uint64, error) {
+func (u *User) Create() (*UserCreateRes, error) {
 	_, err := u.Sess.Insert(u.Users)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
-	return u.Id, nil
+	return &UserCreateRes{ID: u.Id}, nil
 }
 
 // List select user list
 func (u *User) List() ([]*UserListRes, error) {
-	// select
-	//if err != nil {
-	//	return nil, err
-	//}
-
-	//list := make([]*UserList, len(users))
-	//for i := 0; i < len(users); i++ {
-	//	user := users[i]
-	//	list[i] = &UserList{user.ID, user.Name}
-	//}
-	return nil, nil
+	var users []db.Users
+	if err := u.Sess.Asc("id").Find(&users); err != nil {
+		return nil, err
+	}
+	res := make([]*UserListRes, len(users))
+	for i := 0; i < len(users); i++ {
+		user := users[i]
+		res[i] = &UserListRes{ID: user.Id, Name: user.Name}
+	}
+	return res, nil
 }
