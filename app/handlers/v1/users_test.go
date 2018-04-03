@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ken-aio/go-echo-xorm/app/infra/db"
 	"github.com/ken-aio/go-echo-xorm/app/logics"
 	"github.com/ken-aio/go-echo-xorm/app/models"
 	"github.com/labstack/echo"
@@ -31,20 +32,46 @@ func (u *UserLogicMock) UserList() ([]*models.UserListRes, error) {
 	return resp, nil
 }
 
-func TestUserCreate(t *testing.T) {
+// TestUserCreateMock logicをmockにしたテストケース
+func TestUserCreateMock(t *testing.T) {
 	body := &userCreateReq{Name: "test", Birthdate: time.Now(), Gender: "male"}
 	c, res := buildContext(echo.POST, "/api/v1/users", toJSON(body))
 
 	h := NewUserHandler(&UserLogicMock{})
-	if assert.NoError(t, h.UserCreate(c)) {
-		assert.Equal(t, http.StatusOK, res.Code)
+	exec := prepareHandler(h.UserCreate)
+	if assert.NoError(t, exec(c)) {
+		assert.Equal(t, http.StatusOK, res.Code, "http status ok")
 		actual := &models.UserCreateRes{}
 		json.Unmarshal(([]byte)(res.Body.String()), &actual)
 		assert.Equal(t, actual.ID, int64(1))
 	}
 }
 
-func TestUserList(t *testing.T) {
+// TestUserCreate logicをmockにしない場合のテストケース
+func TestUserCreate(t *testing.T) {
+	body := &userCreateReq{Name: "test", Birthdate: time.Now(), Gender: "male"}
+	c, res := buildContext(echo.POST, "/api/v1/users", toJSON(body))
+
+	con, _ := db.InitDB()
+	var user db.Users
+	beforeCount, _ := con.Count(&user)
+
+	h := NewUserHandler(&logics.UserLogic{})
+	exec := prepareHandler(h.UserCreate)
+	if assert.NoError(t, exec(c)) {
+		assert.Equal(t, http.StatusOK, res.Code, "http status ok")
+		actual := &models.UserCreateRes{}
+		afterCount, _ := con.Count(&user)
+		json.Unmarshal(([]byte)(res.Body.String()), &actual)
+		assert.Equal(t, beforeCount, afterCount-1, "1件のレコードがinsertされていること")
+
+		var user db.Users
+		con.Desc("id").Limit(1).Get(&user)
+		assert.Equal(t, user.Id, actual.ID, "最後にinsertされたidが一致すること")
+	}
+}
+
+func TestUserListMock(t *testing.T) {
 	c, res := buildContext(echo.GET, "/api/v1/users", "")
 
 	h := NewUserHandler(&UserLogicMock{})

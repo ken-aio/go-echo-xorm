@@ -3,10 +3,20 @@ package v1
 import (
 	"encoding/json"
 	"net/http/httptest"
+	"os"
 	"strings"
+	"testing"
 
+	"github.com/ken-aio/go-echo-xorm/app/middleware"
 	"github.com/labstack/echo"
 )
+
+func TestMain(m *testing.M) {
+	// before testing
+	code := m.Run()
+	// after testing
+	os.Exit(code)
+}
 
 // buildContext テスト用のcontextを生成する
 func buildContext(method string, url string, body string) (echo.Context, *httptest.ResponseRecorder) {
@@ -17,6 +27,12 @@ func buildContext(method string, url string, body string) (echo.Context, *httpte
 
 	c := e.NewContext(req, res)
 	return c, res
+}
+
+// prepareHandler middlewareを準備したhandlerを用意する
+func prepareHandler(next echo.HandlerFunc) echo.HandlerFunc {
+	handler := middleware.Database(next)
+	return handler
 }
 
 // toJSON structをjsonに変換する

@@ -13,5 +13,7 @@ func InitDB() (*xorm.Engine, error) {
 	// TODO: Connection pool setting
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
+	// TODO for debug
+	db.ShowSQL(true)
 	return db, nil
 }

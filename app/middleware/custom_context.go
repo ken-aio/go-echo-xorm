@@ -22,8 +22,6 @@ func (d *CustomContext) GetDB() (*xorm.Engine, error) {
 	iCon := d.Get(DBKey)
 	if iCon != nil {
 		con := iCon.(*xorm.Engine)
-		// TODO for debug
-		con.ShowSQL(true)
 		return con, nil
 	}
 	con, err := db.InitDB()
