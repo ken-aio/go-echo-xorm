@@ -7,7 +7,9 @@ import (
 	"github.com/ken-aio/go-echo-xorm/app/handlers/v1"
 	"github.com/ken-aio/go-echo-xorm/app/logics"
 	"github.com/ken-aio/go-echo-xorm/app/middleware"
+	"github.com/ken-aio/go-echo-xorm/config"
 	"github.com/labstack/echo"
+	"github.com/spf13/viper"
 
 	"github.com/swaggo/echo-swagger"
 )
@@ -16,8 +18,8 @@ import (
 func Init() *echo.Echo {
 	e := echo.New()
 
-	// TODO config
-	e.Debug = true
+	config.LoadConfig(e)
+	e.Debug = viper.GetBool("debug")
 
 	middleware.Init(e)
 

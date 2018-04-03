@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/ken-aio/go-echo-xorm/app/middleware"
+	"github.com/ken-aio/go-echo-xorm/config"
 	"github.com/labstack/echo"
 )
 
@@ -21,6 +22,8 @@ func TestMain(m *testing.M) {
 // buildContext テスト用のcontextを生成する
 func buildContext(method string, url string, body string) (echo.Context, *httptest.ResponseRecorder) {
 	e := echo.New()
+	os.Setenv("conf.path", "../../../config")
+	config.LoadConfig(e)
 	req := httptest.NewRequest(method, url, strings.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	res := httptest.NewRecorder()

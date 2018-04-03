@@ -1,1 +1,16 @@
 name: local
+debug: true
+db:
+  base:
+    driver: mysql
+    dbname: sampledb
+    user: sampledb
+    password: sampledb
+    host: localhost
+    port: 3306
+    option: parseTime=true&loc=Asia%2FTokyo
+  settings:
+    max_idle_conns: 10
+    max_open_conns: 10
+    show_sql: true
+
