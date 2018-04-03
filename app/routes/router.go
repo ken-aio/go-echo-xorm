@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/ken-aio/go-echo-xorm/app/handlers/v1"
+	"github.com/ken-aio/go-echo-xorm/app/logics"
 	"github.com/ken-aio/go-echo-xorm/app/middleware"
 	"github.com/labstack/echo"
 
@@ -36,10 +37,11 @@ func Init() *echo.Echo {
 	{
 		users := apiV1.Group("/users")
 		{
-			users.POST("", v1.UserCreate)
-			users.GET("", v1.UserList)
-			users.PUT("/:id", v1.UserUpdate)
-			users.DELETE("/:id", v1.UserDelete)
+			u := v1.NewUserHandler(&logics.UserLogic{})
+			users.POST("", u.UserCreate)
+			users.GET("", u.UserList)
+			users.PUT("/:id", u.UserUpdate)
+			users.DELETE("/:id", u.UserDelete)
 		}
 		groups := apiV1.Group("/groups")
 		{

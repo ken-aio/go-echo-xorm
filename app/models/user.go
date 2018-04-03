@@ -32,7 +32,7 @@ func NewUserModel(s *xorm.Session) *User {
 
 // Create insert into user
 func (u *User) Create() (*UserCreateRes, error) {
-	_, err := u.Sess.InsertOne(u.Users)
+	_, err := u.Sess.Insert(u.Users)
 	if err != nil {
 		return nil, err
 	}

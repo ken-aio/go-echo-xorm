@@ -8,13 +8,20 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// IUserLogic user logic interface
+type IUserLogic interface {
+	NewUserLogic(c echo.Context) IUserLogic
+	UserCreate(name string, birthdate time.Time, gender string) (*models.UserCreateRes, error)
+	UserList() ([]*models.UserListRes, error)
+}
+
 // UserLogic user logic
 type UserLogic struct {
 	*CommonLogic
 }
 
 // NewUserLogic create new user instance
-func NewUserLogic(c echo.Context) *UserLogic {
+func (u *UserLogic) NewUserLogic(c echo.Context) IUserLogic {
 	return &UserLogic{&CommonLogic{Ctx: c}}
 }
 

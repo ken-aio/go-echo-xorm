@@ -14,7 +14,15 @@ type (
 		Birthdate time.Time `json:"birthdate"`
 		Gender    string    `json:"gender"`
 	}
+	userHandler struct {
+		logic logics.IUserLogic
+	}
 )
+
+// NewUserHandler new user handler
+func NewUserHandler(l logics.IUserLogic) *userHandler {
+	return &userHandler{logic: l}
+}
 
 // UserCreate User create API
 // @Summary User create API
@@ -24,12 +32,12 @@ type (
 // @Param   body     body    v1.userCreateReq     true        "user create parameter"
 // @Success 200 {object} models.UserCreateRes	""
 // @Router /api/v1/users [post]
-func UserCreate(c echo.Context) error {
+func (h *userHandler) UserCreate(c echo.Context) error {
 	u := &userCreateReq{}
 	if err := c.Bind(u); err != nil {
 		return err
 	}
-	logic := logics.NewUserLogic(c)
+	logic := h.logic.NewUserLogic(c)
 	resp, err := logic.UserCreate(u.Name, u.Birthdate, u.Gender)
 	if err != nil {
 		return err
@@ -44,8 +52,8 @@ func UserCreate(c echo.Context) error {
 // @Produce  json
 // @Success 200 {object} models.UserListRes	""
 // @Router /api/v1/users [get]
-func UserList(c echo.Context) error {
-	logic := logics.NewUserLogic(c)
+func (h *userHandler) UserList(c echo.Context) error {
+	logic := h.logic.NewUserLogic(c)
 	resp, err := logic.UserList()
 	if err != nil {
 		return err
@@ -61,7 +69,7 @@ func UserList(c echo.Context) error {
 // @Param   user_id     path    int     true        "user id parameter"
 // @Success 200 string string	""
 // @Router /api/v1/users/{user_id} [put]
-func UserUpdate(c echo.Context) error {
+func (h *userHandler) UserUpdate(c echo.Context) error {
 	return c.JSON(http.StatusOK, "update ok")
 }
 
@@ -73,6 +81,6 @@ func UserUpdate(c echo.Context) error {
 // @Param   user_id     path    int     true        "user id parameter"
 // @Success 200 string string	""
 // @Router /api/v1/users/{user_id} [delete]
-func UserDelete(c echo.Context) error {
+func (h *userHandler) UserDelete(c echo.Context) error {
 	return c.JSON(http.StatusOK, "delete ok")
 }
