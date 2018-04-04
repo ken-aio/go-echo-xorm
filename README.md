@@ -1,13 +1,13 @@
 # go-echo-sqlboiler
-Golang sample project using Echo and SQLBoiler.  
+Golang sample project using Echo and XORM.  
 
 ## WebFW
 ### Echo
 https://github.com/labstack/echo
 
 ## ORM
-### SQLBoiler
-https://github.com/volatiletech/sqlboiler
+### XORM
+https://github.com/go-xorm/xorm
 ```
 # generate new orm codes
 $ make gen
@@ -15,6 +15,12 @@ $ make gen
 # create new db schema rs ... replace schema
 $ make rs
 ```
+
+## Application Config
+### Viper
+https://github.com/spf13/viper
+
+see: config dir
 
 ## DB Migration
 ### DBFlute
